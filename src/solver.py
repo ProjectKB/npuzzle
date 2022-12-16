@@ -14,41 +14,50 @@ def uniform_cost(puzzle: Puzzle):
     pass
 
 
-def a_star(puzzle: Puzzle, goal: list[list[int]]):
+def a_star(puzzle: Puzzle, goal: list[list[int]]) -> Puzzle | None:
     # A* algorithm is an algorithm of informed search -> you know what you're looking for
 
     open_list = [puzzle]
     closed_list = []
 
+    #DEBUG
+    step = 0
+
     while open_list:
+        #DEBUG
+        step += 1
+
         # find the node with the lowest f-value
-        current_puzzle = min(open_list, key=Puzzle.get_f)
+        current = min(open_list, key=Puzzle.get_f)
 
-        if current_puzzle.grid == goal:
-            return current_puzzle
+        if current.grid == goal:
+            return current
 
-    # remove current_puzzle from open_list and add it to closed_list
-    # open_list.remove(current)
-    # closed_list.append(current)
+        # remove current from open_list and add it to closed_list
+        open_list.remove(current)
+        closed_list.append(current)
 
-    # current_children = function to calculate current_children
-    # each child could be a puzzle object
-    # in this case we should add a "parent" attribute to puzzle object for reconstructing the path later
-    # the function to calculate children should be in puzzle class too
-    # we could also move f, g and h function to puzzle class and create attribute according to it
-    # this way it should be easier to manipulate them
-    # calculate current children function should create n child, defining their g, h, f and parent at initialization
+        children = current.create_children()
+        # each child could be a puzzle object
+        # in this case we should add a "parent" attribute to puzzle object for reconstructing the path later
+        # the function to calculate children should be in puzzle class too
+        # we could also move f, g and h function to puzzle class and create attribute according to it
+        # this way it should be easier to manipulate them
+        # calculate current children function should create n child, defining their g, h, f and parent at initialization
 
-    # for child in current_children:
-    # if child in closed_list:
-    # continue
+        for child in children:
+            if child in closed_list:
+                continue
+            if child not in open_list:
+                open_list.append(child)
+            # WHAT IS old_child ?
+            # elif child.get_g() < old_child.get_g():
+            #     old_child = child
+        print(f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
 
-    # if child not in open_list:
-    # add child to open_list
-    # elif child in open list and child.g < old_child.g:
-    # replace old_child by child
+    #DEBUG
+    print(f"Finished in {step} steps")
 
     # No solution found
     # return None
-
-    pass
+    return None

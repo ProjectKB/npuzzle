@@ -1,5 +1,6 @@
 import re
 
+import src.utils as utils
 from src.error import Error
 from src.puzzle import Puzzle
 
@@ -95,4 +96,4 @@ def parse(args) -> Puzzle:
     # Convert the numbers list into a grid
     grid = [numbers[i * size:(i + 1) * size] for i in range(size)]
     __assert_valide(size, grid)
-    return Puzzle(None, size, grid)
+    return Puzzle(None, size, grid, utils.find_zero(grid))

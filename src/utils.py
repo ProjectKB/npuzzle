@@ -48,6 +48,14 @@ def generate_control(size: int) -> list[list[int]]:
     return control
 
 
+def find_zero(grid: list[list[int]]) -> tuple[int, int]:
+    for y, a in enumerate(grid):
+        for x, b in enumerate(a):
+            if b == 0:
+                return (x, y)
+    return (-1, -1)
+
+
 def euclidean_distance(point1: float, point2: float) -> float:
     # The Euclidean distance or Euclidean metric is the "ordinary" distance between two points that one would
     # measure with a ruler, and is given by the Pythagorean formula.
