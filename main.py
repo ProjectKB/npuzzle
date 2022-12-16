@@ -1,6 +1,6 @@
 import argparse as a
 
-from src.nparser import Parser
+import src.nparser as parser
 from src.solver import Solver
 
 if __name__ == '__main__':
@@ -21,9 +21,7 @@ if __name__ == '__main__':
         argparse.error(
             'you have to use at least one argument between [-i] and [-f].')
 
-    parser = Parser(args)
-    puzzle = parser.parse()
-
+    puzzle = parser.parse(args)
     solver = Solver(puzzle)
     result = solver.resolve()
 
