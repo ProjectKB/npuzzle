@@ -29,4 +29,4 @@ if __name__ == '__main__':
         print(puzzle)
 
     if args.control:
-        puzzle.display_control()
+        print(puzzle.generate_control())

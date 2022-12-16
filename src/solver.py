@@ -23,7 +23,7 @@ class Solver:
     #      Cons:
     #          - Can get stuck in local minima and find suboptimal solutions
     #          - May not always find a solution
-     
+
     #  Uniform cost search:
     #      Pros:
     #          - Guaranteed to find the optimal solution if one exists
@@ -31,15 +31,15 @@ class Solver:
     #      Cons:
     #          - Can be slower than A* because it expands all nodes, even if they are not promising
     #          - May require a lot of memory to store all nodes
-     
-    #  A* algorithm:                                                                                           
-    #      Pros:                                                                                                
-    #          - Guaranteed to find the optimal solution if one exists                                          
-    #          - Can be more efficient than greedy search or uniform cost search because it uses a heuristic    
-    #            function to guide the search                                                                     
-    #      Cons:                                                                                                
-    #          - More computationally expensive than greedy search or uniform cost search because               
-    #            it requires more calculations                                                                  
+
+    #  A* algorithm:
+    #      Pros:
+    #          - Guaranteed to find the optimal solution if one exists
+    #          - Can be more efficient than greedy search or uniform cost search because it uses a heuristic
+    #            function to guide the search
+    #      Cons:
+    #          - More computationally expensive than greedy search or uniform cost search because
+    #            it requires more calculations
 
     def expand_state(self):
         # return every state possible for the current state
@@ -88,40 +88,40 @@ class Solver:
         return max([x1 - x2, y1 - y2])
 
     def resolve(self):
-        ### A* algorithm is an algorithm of informed search -> you know what you're looking for
+        # A* algorithm is an algorithm of informed search -> you know what you're looking for
 
         # open_list = [start_puzzle]
         # closed_list = []
 
         # while open_list:
-            ### find the node with the lowest f-value
-            # current_puzzle = min(open_list, [puzzle.get_f() for puzzle in open_list])
+        # find the node with the lowest f-value
+        # current_puzzle = min(open_list, [puzzle.get_f() for puzzle in open_list])
 
-            # if current_puzzle == goal
-                # return function to reconstruct path
+        # if current_puzzle == goal
+        # return function to reconstruct path
 
-            ### remove current_puzzle from open_list and add it to closed_list
-            # open_list.remove(current)
-            # closed_list.append(current)
+        # remove current_puzzle from open_list and add it to closed_list
+        # open_list.remove(current)
+        # closed_list.append(current)
 
-            # current_children = function to calculate current_children
-            ### each child could be a puzzle object
-            ### in this case we should add a "parent" attribute to puzzle object for reconstructing the path later
-            ### the function to calculate children should be in puzzle class too
-            ### we could also move f, g and h function to puzzle class and create attribute according to it
-            ### this way it should be easier to manipulate them
-            ### calculate current children function should create n child, defining their g, h, f and parent at initialization
+        # current_children = function to calculate current_children
+        # each child could be a puzzle object
+        # in this case we should add a "parent" attribute to puzzle object for reconstructing the path later
+        # the function to calculate children should be in puzzle class too
+        # we could also move f, g and h function to puzzle class and create attribute according to it
+        # this way it should be easier to manipulate them
+        # calculate current children function should create n child, defining their g, h, f and parent at initialization
 
-            # for child in current_children:
-                # if child in closed_list:
-                    # continue
+        # for child in current_children:
+        # if child in closed_list:
+        # continue
 
-                # if child not in open_list:
-                    # add child to open_list
-                # elif child in open list and child.g < old_child.g:
-                    # replace old_child by child
+        # if child not in open_list:
+        # add child to open_list
+        # elif child in open list and child.g < old_child.g:
+        # replace old_child by child
 
-        ### No solution found
+        # No solution found
         # return None
 
         pass
