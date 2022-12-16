@@ -6,8 +6,8 @@ import re
 
 class Parser:
     COMMENT_PATTERN = "#.*|"
-    SIZE_PATTERN = "^\d+$"
-    OTHER_THAN_SPACE_DIGITS_PATTERN = "[^ ?\d ?]"
+    SIZE_PATTERN = "^\\d+$"
+    OTHER_THAN_SPACE_DIGITS_PATTERN = "[^ ?\\d ?]"
 
     def __init__(self, args):
         self.args = args
