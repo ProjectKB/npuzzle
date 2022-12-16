@@ -1,5 +1,6 @@
 import argparse as a
-import src.parser as p
+import src.nparser as p
+import src.solver as s
 
 if __name__ == '__main__':
     argparse = a.ArgumentParser()
@@ -20,6 +21,9 @@ if __name__ == '__main__':
 
     parser = p.Parser(args)
     puzzle = parser.parse()
+
+    solver = s.Solver(puzzle)
+    result = solver.resolve()
 
     if args.print:
         print(puzzle)

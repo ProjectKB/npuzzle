@@ -1,9 +1,11 @@
 # https://www.youtube.com/watch?v=xNJAm3D18s0&ab_channel=inputJT
+import src.puzzle as p
 
 class Solver:
+    puzzle: p.Puzzle
+
     def __init__(self, puzzle):
         self.puzzle = puzzle
-
 
     def expand_state(self):
         # return every state possible for the current state
@@ -22,7 +24,7 @@ class Solver:
         pass
 
     def euclidian_distance(self):
-        # https: // en.wikipedia.org / wiki / Euclidean_distance
+        # https://en.wikipedia.org/wiki/Euclidean_distance
         # https://www.javatpoint.com/euclidian-distance-using-numpy#:~:text=General%20Method%20without%20using%20NumPy%3A&text=sqrs%20%3D%20(point1%20%5B0%5D,and%20point2%3A%20%22%2C%20euc_dist)
         pass
 
@@ -37,6 +39,26 @@ class Solver:
         pass
 
     def resolve(self):
+        open_list = [self.puzzle]
+        closed_list = []
+
+        print(self.puzzle.puzzle)
+        print(self.puzzle.control)
+
+        # while open_list:
+        #     current_state = select best state in open_list
+
+        #     if current_state == goal
+        #         return "Finished"
+
+        #     expanded_state = expand(current_state)
+
+        #     foreach expanded_state:
+        #         calcul f_score
+
+        #     move current state from open_list to closed_list
+        #     add expanded_state to open_list            
+
         # implement A* algorithm
         # A* algorithm is an algorithm of informed search -> you know what you're looking for
 

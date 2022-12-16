@@ -1,6 +1,5 @@
 import math
 
-
 class Puzzle:
     def __init__(self, size, puzzle):
         self.size = size
