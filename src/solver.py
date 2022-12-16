@@ -54,7 +54,7 @@ def uniform_cost():
     pass
 
 
-def a_star():
+def a_star(puzzle: Puzzle):
     # A* algorithm is an algorithm of informed search -> you know what you're looking for
 
     # open_list = [start_puzzle]
