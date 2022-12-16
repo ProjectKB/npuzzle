@@ -1,5 +1,7 @@
 import math
 
+from src.puzzle import Puzzle
+
 
 class Solver:
     def __init__(self, puzzle):
@@ -43,18 +45,6 @@ class Solver:
 
     def expand_state(self):
         # return every state possible for the current state
-        pass
-
-    def get_f(self):
-        # f = g + h
-        pass
-
-    def get_g(self):
-        # the number of nodes traversed from the start node to current node
-        pass
-
-    def get_h(self):
-        # choose heuristic according to strategy (euclidian, manhattan...)
         pass
 
     def euclidean_distance(self, point1, point2):

@@ -1,7 +1,7 @@
+import re
+
 from src.error import Error
 from src.puzzle import Puzzle
-
-import re
 
 
 class Parser:

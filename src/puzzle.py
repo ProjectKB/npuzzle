@@ -16,6 +16,18 @@ class Puzzle:
                                           for item in line]) for line in self.grid])
         return output
 
+    def get_f(self):
+        # f = g + h
+        pass
+
+    def get_g(self):
+        # the number of nodes traversed from the start node to current node
+        pass
+
+    def get_h(self):
+        # choose heuristic according to strategy (euclidian, manhattan...)
+        pass
+
     def generate_control(self):
         control = [['0' for _ in range(self.size)] for _ in range(self.size)]
         center = {'y': math.floor(self.size / 2), 'x': math.floor(self.size / 2)} if math.floor(self.size % 2) else {
