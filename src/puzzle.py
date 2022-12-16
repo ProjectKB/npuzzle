@@ -2,36 +2,19 @@ import math
 
 
 class Puzzle:
-    def __init__(self, size, puzzle):
+    size: int
+    grid: list[list[int]]
+
+    def __init__(self, size: int, grid: list[list[int]]):
         self.size = size
-        self.puzzle = puzzle
-        self.control = self.generate_control()
-        self.field_size = self.get_field_size()
+        self.grid = grid
 
     def __str__(self):
-        output = f"\n\t{self.size:>{self.field_size}}\n\n"
-        for row in self.puzzle:
-            output += '\t'
-            for nb in row:
-                output += f"{nb:>{self.field_size}} "
-            output += '\n'
+        max_len = len(str(self.size ** 2))
+        output = f"{self.size}\n > "
+        output += "\n > ".join([" ".join([str(item).rjust(max_len)
+                                          for item in line]) for line in self.grid])
         return output
-
-    def display_control(self):
-        print("")
-        for row in self.control:
-            print("\t", end='')
-            for nb in row:
-                print(f"{nb:>{self.field_size}}", end=' ')
-            print("")
-        print("")
-
-    def get_field_size(self):
-        pow = 1
-        size = self.size ** 2 - 1
-        while size > 10 ** pow:
-            pow += 1
-        return pow
 
     def generate_control(self):
         control = [['0' for _ in range(self.size)] for _ in range(self.size)]
