@@ -4,7 +4,7 @@ from src.error import Error
 from src.puzzle import Puzzle
 
 
-def __get_file_content(file: str):
+def __get_file_content(file: str) -> list[str]:
     lines: list[str] = []
 
     try:
@@ -25,7 +25,7 @@ def __get_file_content(file: str):
     return lines
 
 
-def __get_input():
+def __get_input() -> list[str]:
     contents = []
     while True:
         try:
@@ -43,9 +43,9 @@ def __get_input():
     return contents
 
 
-def __check_validity(size: int, puzzle: list[list[int]]):
+def __assert_valide(size: int, puzzle: list[list[int]]):
     # generate puzzle control template
-    puzzle_control = [False for i in range(size ** 2)]
+    puzzle_control = [False for _ in range(size ** 2)]
 
     # check that no number is repeated or too big
     for row in puzzle:
@@ -59,7 +59,7 @@ def __check_validity(size: int, puzzle: list[list[int]]):
             puzzle_control[nb] = True
 
 
-def parse(args):
+def parse(args) -> Puzzle:
     content: list[str] = []
 
     if args.file:
@@ -94,5 +94,5 @@ def parse(args):
 
     # Convert the numbers list into a grid
     grid = [numbers[i * size:(i + 1) * size] for i in range(size)]
-    __check_validity(size, grid)
-    return Puzzle(size, grid)
+    __assert_valide(size, grid)
+    return Puzzle(None, size, grid)

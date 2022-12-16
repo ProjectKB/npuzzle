@@ -1,47 +1,7 @@
-import math
-
 from src.puzzle import Puzzle
 
 
-def expand_state():
-    # return every state possible for the current state
-    pass
-
-
-def euclidean_distance(point1, point2):
-    # The Euclidean distance or Euclidean metric is the "ordinary" distance between two points that one would
-    # measure with a ruler, and is given by the Pythagorean formula.
-    # -> (0,0) (3,4) = 5
-
-    x1, y1 = point1
-    x2, y2 = point2
-
-    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-
-
-def manhattan_distance(point1, point2):
-    # The Manhattan distance between two points is the sum of the absolute differences of their coordinates.
-    # In other words, it is the total distance traveled on a grid to get from one point to the other.
-    # -> (0,0) (3,4) = 7
-
-    x1, y1 = point1
-    x2, y2 = point2
-
-    return abs(x1 - x2) + abs(y1 - y2)
-
-
-def chebyshev_distance(point1, point2):
-    # The Chebyshev distance between two points is the maximum of the absolute differences of their coordinates.
-    # In other words, it is the greatest distance between any two coordinates of the two points.
-    # -> (0,0) (3,4) = 4
-
-    x1, y1 = point1
-    x2, y2 = point2
-
-    return max([x1 - x2, y1 - y2])
-
-
-def greedy_search():
+def greedy_search(puzzle: Puzzle):
     # A* but g == 0 for every node
     # It can be really fast, but it can lead to suboptimal solution because of local minimum.
     # Meaning the algorithm doesn't consider the cost of an action but only his short term result,
@@ -49,23 +9,23 @@ def greedy_search():
     pass
 
 
-def uniform_cost():
+def uniform_cost(puzzle: Puzzle):
     # A* but h == 0 for every node resulting in BFS algorithm (nodes are explored in width, and EVERY one of them are visited)
     pass
 
 
-def a_star(puzzle: Puzzle):
+def a_star(puzzle: Puzzle, goal: list[list[int]]):
     # A* algorithm is an algorithm of informed search -> you know what you're looking for
 
-    # open_list = [start_puzzle]
-    # closed_list = []
+    open_list = [puzzle]
+    closed_list = []
 
-    # while open_list:
-    # find the node with the lowest f-value
-    # current_puzzle = min(open_list, [puzzle.get_f() for puzzle in open_list])
+    while open_list:
+        # find the node with the lowest f-value
+        current_puzzle = min(open_list, key=Puzzle.get_f)
 
-    # if current_puzzle == goal
-    # return function to reconstruct path
+        if current_puzzle.grid == goal:
+            return current_puzzle
 
     # remove current_puzzle from open_list and add it to closed_list
     # open_list.remove(current)

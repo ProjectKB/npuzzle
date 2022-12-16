@@ -2,6 +2,7 @@ import argparse as a
 
 import src.nparser as parser
 import src.solver as solver
+import src.utils as utils
 
 if __name__ == '__main__':
     argparse = a.ArgumentParser()
@@ -22,10 +23,11 @@ if __name__ == '__main__':
             'you have to use at least one argument between [-i] and [-f].')
 
     puzzle = parser.parse(args)
-    solver.a_star(puzzle)
+    goal = utils.generate_control(puzzle.size)
+    solver.a_star(puzzle, goal)
 
     if args.print:
         print(puzzle)
 
     if args.control:
-        print(puzzle.generate_control())
+        print(goal)
