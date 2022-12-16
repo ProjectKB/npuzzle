@@ -37,7 +37,7 @@ class Parser:
                 break
             except UnicodeDecodeError:
                 Error.throw(Error.FAIL, Error.UNICODE_DECODE_ERROR,
-                            f"'utf-8' codec can't decode byte: {self.args.file}")
+                            f"'utf-8' codec can't decode byte")
             except KeyboardInterrupt:
                 Error.throw(Error.FAIL, Error.KEYBOARD_INTERRUPT_ERROR,
                             "use Ctrl+D to interrupt input reading")
