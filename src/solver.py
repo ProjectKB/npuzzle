@@ -1,4 +1,6 @@
 from src.puzzle import Puzzle
+from src.error import Error as e
+from src.utils import find_zero
 
 
 def greedy_search(puzzle: Puzzle):
@@ -14,17 +16,19 @@ def uniform_cost(puzzle: Puzzle):
     pass
 
 
-def a_star(puzzle: Puzzle, goal: list[list[int]]) -> Puzzle | None:
+def a_star(puzzle: Puzzle, goal: list[list[int]], goal_dict: {int: list[int]}) -> Puzzle | None:
     # A* algorithm is an algorithm of informed search -> you know what you're looking for
 
     open_list = [puzzle]
     closed_list = []
 
-    #DEBUG
+    # DEBUG
     step = 0
 
+    goal_zero = find_zero(goal)
+
     while open_list:
-        #DEBUG
+        # DEBUG
         step += 1
 
         # find the node with the lowest f-value
@@ -38,24 +42,24 @@ def a_star(puzzle: Puzzle, goal: list[list[int]]) -> Puzzle | None:
         closed_list.append(current)
 
         children = current.create_children()
-        # each child could be a puzzle object
-        # in this case we should add a "parent" attribute to puzzle object for reconstructing the path later
-        # the function to calculate children should be in puzzle class too
-        # we could also move f, g and h function to puzzle class and create attribute according to it
-        # this way it should be easier to manipulate them
         # calculate current children function should create n child, defining their g, h, f and parent at initialization
 
         for child in children:
             if child in closed_list:
                 continue
+
+            child.set_f(goal_dict)
+            # child.set_f2(goal_zero)
             if child not in open_list:
                 open_list.append(child)
-            # WHAT IS old_child ?
-            # elif child.get_g() < old_child.get_g():
-            #     old_child = child
+            # ## this case seems to never happening
+            else:
+                for state in open_list:
+                    if state is child and state.f > child.f:
+                        e.print_error("here")
         print(f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
 
-    #DEBUG
+    # DEBUG
     print(f"Finished in {step} steps")
 
     # No solution found

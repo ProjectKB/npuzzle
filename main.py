@@ -4,6 +4,9 @@ import src.nparser as parser
 import src.solver as solver
 import src.utils as utils
 
+from src.error import Error as e
+
+
 if __name__ == '__main__':
     argparse = a.ArgumentParser()
 
@@ -24,7 +27,9 @@ if __name__ == '__main__':
 
     puzzle = parser.parse(args)
     goal = utils.generate_control(puzzle.size)
-    solver.a_star(puzzle, goal)
+    goal_dict = utils.generate_control_dict(goal)
+
+    solver.a_star(puzzle, goal, goal_dict)
 
     if args.print:
         print(puzzle)

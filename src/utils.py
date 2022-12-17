@@ -1,5 +1,7 @@
 import math
 
+from src.error import Error as e
+
 
 def generate_control(size: int) -> list[list[int]]:
     control = [[0 for _ in range(size)] for _ in range(size)]
@@ -48,36 +50,53 @@ def generate_control(size: int) -> list[list[int]]:
     return control
 
 
+def generate_control_dict(goal: list[list[int]]) -> {int: list[int]}:
+    goal_dict = {}
+    for y, row in enumerate(goal):
+        for x, nb in enumerate(row):
+            goal_dict[nb] = [y, x]
+    return goal_dict
+
+
 def find_zero(grid: list[list[int]]) -> tuple[int, int]:
     for y, a in enumerate(grid):
         for x, b in enumerate(a):
             if b == 0:
-                return (x, y)
-    return (-1, -1)
+                return x, y
+    return -1, -1
 
 
-def euclidean_distance(point1: float, point2: float) -> float:
+def euclidean_distance(point1: list[int], point2: list[int]) -> float:
     # The Euclidean distance or Euclidean metric is the "ordinary" distance between two points that one would
     # measure with a ruler, and is given by the Pythagorean formula.
     # -> (0,0) (3,4) = 5
-    # sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+    # sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2)
 
-    return math.sqrt((point2 - point1) ** 2 + (point2 - point1) ** 2)
+    y1, x1 = point1
+    y2, x2 = point2
+
+    return math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 
 
-def manhattan_distance(point1: float, point2: float) -> float:
+def manhattan_distance(point1: list[int], point2: list[int]) -> int:
     # The Manhattan distance between two points is the sum of the absolute differences of their coordinates.
     # In other words, it is the total distance traveled on a grid to get from one point to the other.
     # -> (0,0) (3,4) = 7
     # |x1 - x2| + |y1 - y2|
 
-    return abs(point1 - point2) + abs(point1 - point2)
+    y1, x1 = point1
+    y2, x2 = point2
+
+    return abs(x1 - x2) + abs(y1 - y2)
 
 
-def chebyshev_distance(point1: float, point2: float) -> float:
+def chebyshev_distance(point1: list[int], point2: list[int]) -> float:
     # The Chebyshev distance between two points is the maximum of the absolute differences of their coordinates.
     # In other words, it is the greatest distance between any two coordinates of the two points.
     # -> (0,0) (3,4) = 4
     # max(x1 - x2, y1 - y2)
 
-    return max(point1 - point2, point1 - point2)
+    y1, x1 = point1
+    y2, x2 = point2
+
+    return max(x1 - x2, y1 - y2)

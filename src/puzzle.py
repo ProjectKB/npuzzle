@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from src.error import Error as e
+from src.utils import manhattan_distance, euclidean_distance, chebyshev_distance
+
 moves: list[tuple[int, int]] = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
 
@@ -8,12 +11,18 @@ class Puzzle:
     size: int
     grid: list[list[int]]
     zero: tuple[int, int]
+    g: int
+    h: int | None
+    f: int | None
 
     def __init__(self, parent: Puzzle | None, size: int, grid: list[list[int]], zero: tuple[int, int]):
         self.size = size
         self.grid = grid
         self.parent = parent
         self.zero = zero
+        self.g = parent.g + 1 if self.parent is not None else 0
+        self.h = None
+        self.f = None
 
     def __str__(self) -> str:
         max_len = len(str(self.size ** 2))
@@ -21,7 +30,7 @@ class Puzzle:
         output += "\n > ".join([" ".join([str(item).rjust(max_len)
                                           for item in line]) for line in self.grid])
         return output
-    
+
     def __eq__(self, other: object) -> bool:
         if type(other) is Puzzle:
             return self.grid == other.grid
@@ -42,14 +51,30 @@ class Puzzle:
             children.append(Puzzle(self, self.size, copy, pos))
         return children
 
-    def get_f(self) -> float:
-        # f = g + h
-        return 0
+    def get_f(self):
+        return self.f
 
-    def get_g(self) -> float:
-        # the number of nodes traversed from the start node to current node
-        return 0
+    def set_f(self, goal_dict: {int: list[int]}) -> float:
+        self.f = self.g + self.set_h(goal_dict)
+        return self.f
 
-    def get_h(self) -> float:
+    def set_h(self, goal_dict: {int: list[int]}) -> float:
         # choose heuristic according to strategy (euclidian, manhattan...)
-        return 0
+        # what's better between get h for every case or only for moving one ?
+
+        h: int = 0
+
+        for y, row in enumerate(self.grid):
+            for x, nb in enumerate(row):
+                h += manhattan_distance([y, x], goal_dict[nb])
+        self.h = h
+
+        return self.h
+
+    def set_f2(self, goal_zero: list[int]) -> float:
+        self.f = self.g + self.set_h2(goal_zero)
+        return self.f
+
+    def set_h2(self, goal_zero: list[int]) -> float:
+        self.h = manhattan_distance(self.zero, goal_zero)
+        return self.h
