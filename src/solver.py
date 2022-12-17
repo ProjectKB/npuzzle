@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from src.puzzle import Puzzle
 from src.error import Error as e
 from src.utils import find_zero
@@ -49,6 +51,8 @@ def a_star(puzzle: Puzzle, goal: list[list[int]], goal_dict: {int: list[int]}) -
                 continue
 
             child.set_f(goal_dict)
+
+            # set_f2 is for calculating f only for zero
             # child.set_f2(goal_zero)
             if child not in open_list:
                 open_list.append(child)
