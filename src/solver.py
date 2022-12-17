@@ -44,7 +44,6 @@ def a_star(puzzle: Puzzle, goal: list[list[int]], goal_dict: {int: list[int]}) -
         closed_list.append(current)
 
         children = current.create_children()
-        # calculate current children function should create n child, defining their g, h, f and parent at initialization
 
         for child in children:
             if child in closed_list:
@@ -56,11 +55,13 @@ def a_star(puzzle: Puzzle, goal: list[list[int]], goal_dict: {int: list[int]}) -
             # child.set_f2(goal_zero)
             if child not in open_list:
                 open_list.append(child)
-            # ## this case seems to never happening
-            else:
+            elif child in open_list:
                 for state in open_list:
-                    if state is child and state.f > child.f:
-                        e.print_error("here")
+                    if state == child and state.g >= child.g:
+                        state.parent = current
+                        state.g = child.g
+                        state.h = child.h
+                        state.f = child.f
         print(f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
 
     # DEBUG
