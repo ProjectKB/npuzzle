@@ -18,11 +18,11 @@ def uniform_cost(puzzle: Puzzle):
     pass
 
 
-def a_star(puzzle: Puzzle, goal: list[list[int]], goal_dict: {int: list[int]}) -> Puzzle | None:
+def a_star(puzzle: Puzzle, goal: list[list[int]], goal_dict: list[tuple[int, int]]) -> Puzzle | None:
     # A* algorithm is an algorithm of informed search -> you know what you're looking for
 
-    open_list = [puzzle]
-    closed_list = []
+    open_list: list[Puzzle] = [puzzle]
+    closed_list: list[Puzzle] = []
 
     # DEBUG
     step = 0

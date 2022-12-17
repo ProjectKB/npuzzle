@@ -11,16 +11,16 @@ class Puzzle:
     size: int
     grid: list[list[int]]
     zero: tuple[int, int]
-    g: int
-    h: int | None
-    f: int | None
+    g: float
+    h: float | None
+    f: float | None
 
     def __init__(self, parent: Puzzle | None, size: int, grid: list[list[int]], zero: tuple[int, int]):
         self.size = size
         self.grid = grid
         self.parent = parent
         self.zero = zero
-        self.g = parent.g + 1 if self.parent is not None else 0
+        self.g = parent.g + 1 if parent is not None else 0
         self.h = None
         self.f = None
 
@@ -51,30 +51,30 @@ class Puzzle:
             children.append(Puzzle(self, self.size, copy, pos))
         return children
 
-    def get_f(self):
-        return self.f
+    def get_f(self) -> float:
+        return self.f or 0
 
-    def set_f(self, goal_dict: {int: list[int]}) -> float:
+    def set_f(self, goal_dict: list[tuple[float, float]]) -> float:
         self.f = self.g + self.set_h(goal_dict)
         return self.f
 
-    def set_h(self, goal_dict: {int: list[int]}) -> float:
+    def set_h(self, goal_dict: list[tuple[float, float]]) -> float:
         # choose heuristic according to strategy (euclidian, manhattan...)
         # what's better between get h for every case or only for moving one ?
 
-        h: int = 0
+        h: float = 0
 
         for y, row in enumerate(self.grid):
             for x, nb in enumerate(row):
-                h += manhattan_distance([y, x], goal_dict[nb])
+                h += manhattan_distance((x, y), goal_dict[nb])
         self.h = h
 
         return self.h
 
-    def set_f2(self, goal_zero: list[int]) -> float:
+    def set_f2(self, goal_zero: tuple[float, float]) -> float:
         self.f = self.g + self.set_h2(goal_zero)
         return self.f
 
-    def set_h2(self, goal_zero: list[int]) -> float:
+    def set_h2(self, goal_zero: tuple[float, float]) -> float:
         self.h = manhattan_distance(self.zero, goal_zero)
         return self.h
