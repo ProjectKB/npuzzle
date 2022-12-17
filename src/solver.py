@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from src.puzzle import Puzzle
 
 
@@ -20,11 +22,11 @@ def a_star(puzzle: Puzzle, goal: list[list[int]]) -> Puzzle | None:
     open_list = [puzzle]
     closed_list = []
 
-    #DEBUG
+    # DEBUG
     step = 0
 
     while open_list:
-        #DEBUG
+        # DEBUG
         step += 1
 
         # find the node with the lowest f-value
@@ -53,9 +55,10 @@ def a_star(puzzle: Puzzle, goal: list[list[int]]) -> Puzzle | None:
             # WHAT IS old_child ?
             # elif child.get_g() < old_child.get_g():
             #     old_child = child
-        print(f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
+        print(
+            f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
 
-    #DEBUG
+    # DEBUG
     print(f"Finished in {step} steps")
 
     # No solution found
