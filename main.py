@@ -29,7 +29,7 @@ if __name__ == '__main__':
     goal = utils.generate_control(puzzle.size)
     goal_dict = utils.generate_control_dict(goal)
 
-    solver.a_star(puzzle, goal, goal_dict)
+    solver.a_star(puzzle, goal_dict)
 
     if args.print:
         print(puzzle)

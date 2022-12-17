@@ -14,6 +14,7 @@ class Puzzle:
     g: int
     h: int | None
     f: int | None
+    signature: str
 
     def __init__(self, parent: Puzzle | None, size: int, grid: list[list[int]], zero: tuple[int, int]):
         self.size = size
@@ -23,6 +24,7 @@ class Puzzle:
         self.g = parent.g + 1 if self.parent is not None else 0
         self.h = None
         self.f = None
+        self.signature = self.set_signature()
 
     def __str__(self) -> str:
         max_len = len(str(self.size ** 2))
@@ -51,7 +53,16 @@ class Puzzle:
             children.append(Puzzle(self, self.size, copy, pos))
         return children
 
-    def get_f(self):
+    def set_signature(self) -> str:
+        signature: str = ""
+
+        for row in self.grid:
+            for nb in row:
+                signature += f"{str(nb)},"
+        self.signature = signature
+        return self.signature
+
+    def get_f(self) -> float:
         return self.f
 
     def set_f(self, goal_dict: {int: list[int]}) -> float:
@@ -66,15 +77,8 @@ class Puzzle:
 
         for y, row in enumerate(self.grid):
             for x, nb in enumerate(row):
-                h += manhattan_distance([y, x], goal_dict[nb])
+                if nb != 0:
+                    h += manhattan_distance([y, x], goal_dict[nb])
         self.h = h
 
-        return self.h
-
-    def set_f2(self, goal_zero: list[int]) -> float:
-        self.f = self.g + self.set_h2(goal_zero)
-        return self.f
-
-    def set_h2(self, goal_zero: list[int]) -> float:
-        self.h = manhattan_distance(self.zero, goal_zero)
         return self.h
