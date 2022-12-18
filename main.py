@@ -28,10 +28,10 @@ if __name__ == '__main__':
     puzzle = parser.parse(args)
     goal = utils.generate_control(puzzle.size)
 
-    solver.a_star(puzzle, utils.inverse(puzzle.size, goal))
-
     if args.print:
         print(puzzle)
 
     if args.control:
         print(goal)
+
+    solver.a_star(puzzle, utils.inverse(puzzle.size, goal))

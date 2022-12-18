@@ -26,7 +26,7 @@ class Puzzle:
 
     def __str__(self) -> str:
         max_len = len(str(self.size ** 2))
-        output = f"{self.size} {self.zero}\n > "
+        output = f"{self.size} ({self.g})\n > "
         output += "\n > ".join([" ".join([str(item).rjust(max_len)
                                           for item in line]) for line in self.grid])
         return output

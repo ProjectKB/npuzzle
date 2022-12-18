@@ -17,14 +17,18 @@ def uniform_cost(puzzle: Puzzle):
     # A* but h == 0 for every node resulting in BFS algorithm (nodes are explored in width, and EVERY one of them are visited)
     pass
 
+def __print_all(puzzle: Puzzle):
+    if puzzle.parent is not None:
+        __print_all(puzzle.parent)
+    print(puzzle)
 
 def a_star(puzzle: Puzzle, goal: list[tuple[int, int]]) -> Puzzle | None:
     puzzle.h = puzzle.distance(goal)
 
-    open_list_q: list[tuple[int, int, str]] = [
+    open_list_q: list[tuple[float, float, str]] = [
         (puzzle.get_f(), puzzle.g, puzzle.signature)]
-    open_list: dict[str: Puzzle] = {puzzle.signature: puzzle}
-    closed_list: dict[str: Puzzle] = {}
+    open_list: dict[str, Puzzle] = {puzzle.signature: puzzle}
+    closed_list: dict[str, Puzzle] = {}
 
     # DEBUG
     step = 0
@@ -37,6 +41,7 @@ def a_star(puzzle: Puzzle, goal: list[tuple[int, int]]) -> Puzzle | None:
         current = open_list[current_q[2]]
 
         if current.h == 0:
+            __print_all(current)
             print(f"Steps: {step} - G: {current.g}")
             return current
 

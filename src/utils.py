@@ -3,15 +3,17 @@ import math
 
 def generate_control(size: int) -> list[list[int]]:
     control = [[0 for _ in range(size)] for _ in range(size)]
-    center = {'y': math.floor(size / 2), 'x': math.floor(size / 2)} if math.floor(size % 2) else {
-        'y': math.floor(size / 2), 'x': math.floor(size / 2) - 1}
 
     step = 1
     count_step = 0
     count_sign = 1
     h = size ** 2 - 1
-    y = center['y']
-    x = center['x']
+    
+    x = math.floor(size / 2)
+    y = math.floor(size / 2)
+    if size % 2 == 0:
+        x -= 1
+
     x_axis = True
     neg = True if size % 2 else False
     control[y][x] = 0
