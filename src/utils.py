@@ -1,14 +1,22 @@
 import math
 
 
-def generate_control(size: int) -> list[list[int]]:
-    control = [[0 for _ in range(size)] for _ in range(size)]
+def index_to_pos(index: int, size: int) -> tuple[int, int]:
+    return (index % size, math.floor(index / size))
+
+
+def pos_to_index(pos: tuple[int, int], size: int) -> int:
+    return pos[0] + (pos[1] * size)
+
+
+def generate_control(size: int) -> list[int]:
+    control = [0 for _ in range(size ** 2)]
 
     step = 1
     count_step = 0
     count_sign = 1
     h = size ** 2 - 1
-    
+
     x = math.floor(size / 2)
     y = math.floor(size / 2)
     if size % 2 == 0:
@@ -16,7 +24,7 @@ def generate_control(size: int) -> list[list[int]]:
 
     x_axis = True
     neg = True if size % 2 else False
-    control[y][x] = 0
+    control[pos_to_index((x, y), size)] = 0
 
     while h > 0:
         if count_step == 2:
@@ -40,7 +48,7 @@ def generate_control(size: int) -> list[list[int]]:
                     y += 1
             if x < 0:
                 break
-            control[y][x] = h
+            control[pos_to_index((x, y), size)] = h
             h -= 1
 
         x_axis = not x_axis
@@ -50,20 +58,11 @@ def generate_control(size: int) -> list[list[int]]:
     return control
 
 
-def inverse(size: int, grid: list[list[int]]) -> list[tuple[int, int]]:
-    goal_dict: list[tuple[int, int]] = [(0, 0) for _ in range(size ** 2)]
-    for y, row in enumerate(grid):
-        for x, nb in enumerate(row):
-            goal_dict[nb] = (x, y)
+def inverse(size: int, grid: list[int]) -> list[int]:
+    goal_dict: list[int] = [0 for _ in range(size ** 2)]
+    for i, nb in enumerate(grid):
+        goal_dict[nb] = i
     return goal_dict
-
-
-def find_zero(grid: list[list[int]]) -> tuple[int, int]:
-    for y, a in enumerate(grid):
-        for x, b in enumerate(a):
-            if b == 0:
-                return (x, y)
-    return -1, -1
 
 
 def euclidean_distance(point1: tuple[float, float], point2: tuple[float, float]) -> float:

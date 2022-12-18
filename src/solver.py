@@ -17,12 +17,14 @@ def uniform_cost(puzzle: Puzzle):
     # A* but h == 0 for every node resulting in BFS algorithm (nodes are explored in width, and EVERY one of them are visited)
     pass
 
+
 def __print_all(puzzle: Puzzle):
     if puzzle.parent is not None:
         __print_all(puzzle.parent)
     print(puzzle)
 
-def a_star(puzzle: Puzzle, goal: list[tuple[int, int]]) -> Puzzle | None:
+
+def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
     puzzle.h = puzzle.distance(goal)
 
     open_list_q: list[tuple[float, float, str]] = [
@@ -39,14 +41,14 @@ def a_star(puzzle: Puzzle, goal: list[tuple[int, int]]) -> Puzzle | None:
 
         current_q = heapq.heappop(open_list_q)
         current = open_list[current_q[2]]
+        del open_list[current.signature]
 
         if current.h == 0:
             __print_all(current)
-            print(f"Steps: {step} - G: {current.g}")
+            print(f"Steps: {step} - Open {len(open_list)} - Closed {len(closed_list)} - G: {current.g}")
             return current
 
         closed_list[current.signature] = current
-        del open_list[current.signature]
 
         children = current.create_children()
 
@@ -55,10 +57,15 @@ def a_star(puzzle: Puzzle, goal: list[tuple[int, int]]) -> Puzzle | None:
                 continue
 
             child.h = child.distance(goal)
-            if open_list.get(child.signature) is None or child.g < open_list[child.signature].g:
+            if open_list.get(child.signature) is None:
                 heapq.heappush(
                     open_list_q, (child.get_f(), child.g, child.signature))
                 open_list[child.signature] = child
+            else:
+                old = open_list[child.signature]
+                if child.g < old.g:
+                    old.g = child.g
+                    old.parent = child.parent
 
         # DEBUG
         if step % 10000 == 0:

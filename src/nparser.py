@@ -44,20 +44,19 @@ def __get_input() -> list[str]:
     return contents
 
 
-def __assert_valide(size: int, puzzle: list[list[int]]):
+def __assert_valide(size: int, puzzle: list[int]):
     # generate puzzle control template
     puzzle_control = [False for _ in range(size ** 2)]
 
     # check that no number is repeated or too big
-    for row in puzzle:
-        for nb in row:
-            if nb < 0 or nb >= size ** 2:
-                Error.throw(Error.FAIL, Error.FILE_FORMAT_ERROR,
-                            f"file format error: number too big: {nb}")
-            elif puzzle_control[nb] == True:
-                Error.throw(Error.FAIL, Error.FILE_FORMAT_ERROR,
-                            f"file format error: number repeated: {nb}")
-            puzzle_control[nb] = True
+    for nb in puzzle:
+        if nb < 0 or nb >= size ** 2:
+            Error.throw(Error.FAIL, Error.FILE_FORMAT_ERROR,
+                        f"file format error: number too big: {nb}")
+        elif puzzle_control[nb] == True:
+            Error.throw(Error.FAIL, Error.FILE_FORMAT_ERROR,
+                        f"file format error: number repeated: {nb}")
+        puzzle_control[nb] = True
 
 
 def parse(args) -> Puzzle:
@@ -94,6 +93,5 @@ def parse(args) -> Puzzle:
                     f"file format error: size is {size}, {size ** 2} numbers should have been provided, found {len(numbers)}")
 
     # Convert the numbers list into a grid
-    grid = [numbers[i * size:(i + 1) * size] for i in range(size)]
-    __assert_valide(size, grid)
-    return Puzzle(None, size, grid, utils.find_zero(grid))
+    __assert_valide(size, numbers)
+    return Puzzle(None, size, numbers, numbers.index(0))
