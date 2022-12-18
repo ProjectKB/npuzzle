@@ -1,6 +1,0 @@
-# comment
-3
-3 7 0
-# comment
-4 2 8
-6 1 5 # comment

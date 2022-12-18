@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import heapq
+
 from src.puzzle import Puzzle
-from src.error import Error as e
-from src.utils import find_zero
 
 
 def greedy_search(puzzle: Puzzle):
@@ -18,51 +18,47 @@ def uniform_cost(puzzle: Puzzle):
     pass
 
 
-def a_star(puzzle: Puzzle, goal: list[list[int]], goal_dict: list[tuple[int, int]]) -> Puzzle | None:
-    # A* algorithm is an algorithm of informed search -> you know what you're looking for
+def a_star(puzzle: Puzzle, goal: list[tuple[int, int]]) -> Puzzle | None:
+    puzzle.h = puzzle.distance(goal)
 
-    open_list: list[Puzzle] = [puzzle]
-    closed_list: list[Puzzle] = []
+    open_list_q: list[tuple[int, int, str]] = [
+        (puzzle.get_f(), puzzle.g, puzzle.signature)]
+    open_list: dict[str: Puzzle] = {puzzle.signature: puzzle}
+    closed_list: dict[str: Puzzle] = {}
 
     # DEBUG
     step = 0
-
-    goal_zero = find_zero(goal)
 
     while open_list:
         # DEBUG
         step += 1
 
-        # find the node with the lowest f-value
-        current = min(open_list, key=Puzzle.get_f)
+        current_q = heapq.heappop(open_list_q)
+        current = open_list[current_q[2]]
 
-        if current.grid == goal:
+        if current.h == 0:
+            print(f"Steps: {step} - G: {current.g}")
             return current
 
-        # remove current from open_list and add it to closed_list
-        open_list.remove(current)
-        closed_list.append(current)
+        closed_list[current.signature] = current
+        del open_list[current.signature]
 
         children = current.create_children()
 
         for child in children:
-            if child in closed_list:
+            if closed_list.get(child.signature):
                 continue
 
-            child.set_f(goal_dict)
+            child.h = child.distance(goal)
+            if open_list.get(child.signature) is None or child.g < open_list[child.signature].g:
+                heapq.heappush(
+                    open_list_q, (child.get_f(), child.g, child.signature))
+                open_list[child.signature] = child
 
-            # set_f2 is for calculating f only for zero
-            # child.set_f2(goal_zero)
-            if child not in open_list:
-                open_list.append(child)
-            elif child in open_list:
-                for state in open_list:
-                    if state == child and state.g >= child.g:
-                        state.parent = current
-                        state.g = child.g
-                        state.h = child.h
-                        state.f = child.f
-        print(f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
+        # DEBUG
+        if step % 10000 == 0:
+            print(
+                f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
 
     # DEBUG
     print(f"Finished in {step} steps")

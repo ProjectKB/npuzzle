@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from src.error import Error as e
-from src.utils import manhattan_distance, euclidean_distance, chebyshev_distance
+from src.utils import manhattan_distance, euclidean_distance, chebyshev_distance, inverse
 
 moves: list[tuple[int, int]] = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
@@ -12,8 +12,8 @@ class Puzzle:
     grid: list[list[int]]
     zero: tuple[int, int]
     g: float
-    h: float | None
-    f: float | None
+    h: float
+    signature: str
 
     def __init__(self, parent: Puzzle | None, size: int, grid: list[list[int]], zero: tuple[int, int]):
         self.size = size
@@ -21,8 +21,8 @@ class Puzzle:
         self.parent = parent
         self.zero = zero
         self.g = parent.g + 1 if parent is not None else 0
-        self.h = None
-        self.f = None
+        self.h = 0
+        self.signature = self.__get_signature();
 
     def __str__(self) -> str:
         max_len = len(str(self.size ** 2))
@@ -35,6 +35,14 @@ class Puzzle:
         if type(other) is Puzzle:
             return self.grid == other.grid
         return False
+    
+    def __get_signature(self) -> str:
+        signature: str = ""
+
+        for row in self.grid:
+            for nb in row:
+                signature += f"{str(nb)},"
+        return signature
 
     def create_children(self) -> list[Puzzle]:
         global moves
@@ -52,29 +60,21 @@ class Puzzle:
         return children
 
     def get_f(self) -> float:
-        return self.f or 0
+        return self.g + self.h
 
-    def set_f(self, goal_dict: list[tuple[float, float]]) -> float:
-        self.f = self.g + self.set_h(goal_dict)
-        return self.f
-
-    def set_h(self, goal_dict: list[tuple[float, float]]) -> float:
+    def distance(self, to: list[tuple[int, int]]) -> float:
         # choose heuristic according to strategy (euclidian, manhattan...)
         # what's better between get h for every case or only for moving one ?
 
-        h: float = 0
-
+        distance: float = 0
         for y, row in enumerate(self.grid):
             for x, nb in enumerate(row):
-                h += manhattan_distance((x, y), goal_dict[nb])
-        self.h = h
+                if nb != 0:
+                    distance += manhattan_distance((x, y), to[nb])
+        return distance
 
-        return self.h
+    def distance2(self, to: tuple[float, float]) -> float:
+        # choose heuristic according to strategy (euclidian, manhattan...)
+        # what's better between get h for every case or only for moving one ?
 
-    def set_f2(self, goal_zero: tuple[float, float]) -> float:
-        self.f = self.g + self.set_h2(goal_zero)
-        return self.f
-
-    def set_h2(self, goal_zero: tuple[float, float]) -> float:
-        self.h = manhattan_distance(self.zero, goal_zero)
-        return self.h
+        return manhattan_distance(self.zero, to)

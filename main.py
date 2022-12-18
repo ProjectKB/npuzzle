@@ -27,9 +27,8 @@ if __name__ == '__main__':
 
     puzzle = parser.parse(args)
     goal = utils.generate_control(puzzle.size)
-    goal_dict = utils.generate_control_dict(puzzle.size, goal)
 
-    solver.a_star(puzzle, goal, goal_dict)
+    solver.a_star(puzzle, utils.inverse(puzzle.size, goal))
 
     if args.print:
         print(puzzle)

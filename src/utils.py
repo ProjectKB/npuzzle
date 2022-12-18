@@ -1,7 +1,5 @@
 import math
 
-from src.error import Error as e
-
 
 def generate_control(size: int) -> list[list[int]]:
     control = [[0 for _ in range(size)] for _ in range(size)]
@@ -50,9 +48,9 @@ def generate_control(size: int) -> list[list[int]]:
     return control
 
 
-def generate_control_dict(size: int, goal: list[list[int]]) -> list[tuple[int, int]]:
+def inverse(size: int, grid: list[list[int]]) -> list[tuple[int, int]]:
     goal_dict: list[tuple[int, int]] = [(0, 0) for _ in range(size ** 2)]
-    for y, row in enumerate(goal):
+    for y, row in enumerate(grid):
         for x, nb in enumerate(row):
             goal_dict[nb] = (x, y)
     return goal_dict
