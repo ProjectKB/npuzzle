@@ -62,9 +62,3 @@ class Puzzle:
                 distance += manhattan_distance(index_to_pos(i,
                                                self.size), index_to_pos(to[nb], self.size))
         return distance
-
-    def distance2(self, to: tuple[float, float]) -> float:
-        # choose heuristic according to strategy (euclidian, manhattan...)
-        # what's better between get h for every case or only for moving one ?
-
-        return manhattan_distance(index_to_pos(self.zero, self.size), to)
