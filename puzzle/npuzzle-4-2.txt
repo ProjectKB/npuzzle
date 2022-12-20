@@ -1,6 +1,7 @@
-# Puzzles can be aligned, or NOT. whatever. accept both.
+# A* - S: 96972   | G: 36
+# Gr - S: 4671    | G: 156
 4
-0 10 5 7
-11 14 4 8
-1 2 6 13
-12 3 15 9
+  9  0  3  4
+  1 12 15  7
+ 11  5 14  8
+ 10  2 13  6

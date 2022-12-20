@@ -34,4 +34,5 @@ if __name__ == '__main__':
     if args.control:
         print(goal)
 
-    solver.a_star(puzzle, utils.inverse(puzzle.size, goal))
+    # solver.a_star(puzzle, utils.inverse(puzzle.size, goal))
+    solver.greedy_search(puzzle, utils.inverse(puzzle.size, goal))

@@ -18,8 +18,8 @@ def greedy_search(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
     # resulting in possibly longer path or even no path at all
     puzzle.h = puzzle.distance(goal)
 
-    open_list_q: list[tuple[float, str]] = [
-        (puzzle.h, puzzle.signature)]
+    open_list_q: list[tuple[float, float, str]] = [
+        (puzzle.h, puzzle.g, puzzle.signature)]
     open_list: dict[str, Puzzle] = {puzzle.signature: puzzle}
     closed_list: dict[str, Puzzle] = {}
 
@@ -31,7 +31,11 @@ def greedy_search(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
         step += 1
 
         current_q = heapq.heappop(open_list_q)
-        current = open_list[current_q[1]]
+
+        while closed_list.get(current_q[2]):
+            current_q = heapq.heappop(open_list_q)
+
+        current = open_list[current_q[2]]
         del open_list[current.signature]
 
         if current.h == 0:
@@ -49,14 +53,10 @@ def greedy_search(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
                 continue
 
             child.h = child.distance(goal)
-            if open_list.get(child.signature) is None:
+            if open_list.get(child.signature) is None or open_list[child.signature].g < child.g:
                 heapq.heappush(
-                    open_list_q, (child.h, child.signature))
+                    open_list_q, (child.h, child.g, child.signature))
                 open_list[child.signature] = child
-            else:
-                old = open_list[child.signature]
-                if child.g < old.g:
-                    old.parent = child.parent
 
         # DEBUG
         if step % 10000 == 0:
@@ -71,10 +71,8 @@ def greedy_search(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
     return None
 
 
-# def uniform_cost(puzzle: Puzzle, goal: list[int]):
-
-
-def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
+def uniform_cost(puzzle: Puzzle, goal: list[int]):
+    # A* but h == 0 for every node resulting in BFS algorithm (nodes are explored in width, and EVERY one of them are visited)
     puzzle.h = puzzle.distance(goal)
 
     open_list_q: list[tuple[float, float, str]] = [
@@ -117,6 +115,62 @@ def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
                 if child.g < old.g:
                     old.g = child.g
                     old.parent = child.parent
+
+        # DEBUG
+        if step % 10000 == 0:
+            print(
+                f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
+
+    # DEBUG
+    print(f"Finished in {step} steps")
+
+    # No solution found
+    # return None
+    return None
+
+
+def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
+    puzzle.h = puzzle.distance(goal)
+
+    open_list_q: list[tuple[float, float, float, str]] = [
+        (puzzle.get_f(), puzzle.h, puzzle.g, puzzle.signature)]
+    open_list: dict[str, Puzzle] = {puzzle.signature: puzzle}
+    closed_list: dict[str, Puzzle] = {}
+
+    # DEBUG
+    step = 0
+
+    while open_list:
+        # DEBUG
+        step += 1
+
+        current_q = heapq.heappop(open_list_q)
+
+        while closed_list.get(current_q[3]):
+            current_q = heapq.heappop(open_list_q)
+
+        current = open_list[current_q[3]]
+        del open_list[current.signature]
+
+        if current.h == 0:
+            __print_all(current)
+            print(
+                f"Steps: {step} - Open {len(open_list)} - Closed {len(closed_list)} - G: {current.g}")
+            return current
+
+        closed_list[current.signature] = current
+
+        children = current.create_children()
+
+        for child in children:
+            if closed_list.get(child.signature):
+                continue
+
+            child.h = child.distance(goal)
+            if open_list.get(child.signature) is None or open_list[child.signature].g < child.g:
+                heapq.heappush(
+                    open_list_q, (child.get_f(), child.h, child.g, child.signature))
+                open_list[child.signature] = child
 
         # DEBUG
         if step % 10000 == 0:

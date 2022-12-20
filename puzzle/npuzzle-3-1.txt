@@ -1,5 +1,6 @@
-# this is a comment
+# A* - S: 20      | G: 11
+# Gr - S: 303     | G: 21
 3
-3 2 6 #another comment
+3 2 6 # this is a comment
 1 4 0
 8 7 5
