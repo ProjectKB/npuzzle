@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from src.error import Error as e
-from src.utils import manhattan_distance, euclidean_distance, chebyshev_distance, index_to_pos, pos_to_index
+from src.utils import (chebyshev_distance, euclidean_distance, index_to_pos,
+                       manhattan_distance, pos_to_index)
 
 moves: list[tuple[int, int]] = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
@@ -37,10 +37,10 @@ class Puzzle:
     def create_children(self) -> list[Puzzle]:
         global moves
 
-        old_pos = index_to_pos(self.zero, self.size);
+        old_pos = index_to_pos(self.zero, self.size)
         children: list[Puzzle] = []
         for move in moves:
-            pos = (old_pos[0] + move[0], old_pos[1] + move[1]);
+            pos = (old_pos[0] + move[0], old_pos[1] + move[1])
             if pos[0] < 0 or pos[1] < 0 or pos[0] >= self.size or pos[1] >= self.size:
                 continue
             index = pos_to_index(pos, self.size)

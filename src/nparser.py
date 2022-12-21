@@ -1,6 +1,5 @@
 import re
 
-import src.utils as utils
 from src.error import Error
 from src.puzzle import Puzzle
 

@@ -1,10 +1,17 @@
 import argparse as a
 
 import src.nparser as parser
-import src.solver as solver
 import src.utils as utils
+from src.puzzle import Puzzle
+from src.solvers.a_star import a_star
+from src.solvers.greedy_search import greedy_search
+from src.solvers.uniform_cost import uniform_cost
 
-from src.error import Error as e
+
+def print_all(puzzle: Puzzle):
+    if puzzle.parent is not None:
+        print_all(puzzle.parent)
+    print(puzzle)
 
 
 if __name__ == '__main__':
@@ -34,5 +41,5 @@ if __name__ == '__main__':
     if args.control:
         print(goal)
 
-    # solver.a_star(puzzle, utils.inverse(puzzle.size, goal))
-    solver.greedy_search(puzzle, utils.inverse(puzzle.size, goal))
+    a_star(puzzle, utils.inverse(puzzle.size, goal))
+    # greedy_search(puzzle, utils.inverse(puzzle.size, goal))
