@@ -37,16 +37,18 @@ class Puzzle:
     def create_children(self) -> list[Puzzle]:
         global moves
 
+        old_pos = index_to_pos(self.zero, self.size);
         children: list[Puzzle] = []
         for move in moves:
-            pos = self.zero + pos_to_index(move, self.size)
-            if pos < 0 or pos >= self.size ** 2:
+            pos = (old_pos[0] + move[0], old_pos[1] + move[1]);
+            if pos[0] < 0 or pos[1] < 0 or pos[0] >= self.size or pos[1] >= self.size:
                 continue
+            index = pos_to_index(pos, self.size)
 
             copy = self.grid.copy()
-            copy[self.zero] = self.grid[pos]
-            copy[pos] = 0
-            children.append(Puzzle(self, self.size, copy, pos))
+            copy[self.zero] = self.grid[index]
+            copy[index] = 0
+            children.append(Puzzle(self, self.size, copy, index))
         return children
 
     def get_f(self) -> float:

@@ -36,7 +36,6 @@ def greedy_search(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
             current_q = heapq.heappop(open_list_q)
 
         current = open_list[current_q[2]]
-        del open_list[current.signature]
 
         if current.h == 0:
             __print_all(current)
@@ -45,6 +44,7 @@ def greedy_search(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
             return current
 
         closed_list[current.signature] = current
+        del open_list[current.signature]
 
         children = current.create_children()
 
@@ -53,7 +53,7 @@ def greedy_search(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
                 continue
 
             child.h = child.distance(goal)
-            if open_list.get(child.signature) is None or open_list[child.signature].g < child.g:
+            if open_list.get(child.signature) is None or child.g < open_list[child.signature].g:
                 heapq.heappush(
                     open_list_q, (child.h, child.g, child.signature))
                 open_list[child.signature] = child
@@ -150,7 +150,6 @@ def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
             current_q = heapq.heappop(open_list_q)
 
         current = open_list[current_q[3]]
-        del open_list[current.signature]
 
         if current.h == 0:
             __print_all(current)
@@ -159,6 +158,7 @@ def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
             return current
 
         closed_list[current.signature] = current
+        del open_list[current.signature]
 
         children = current.create_children()
 
@@ -167,7 +167,7 @@ def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
                 continue
 
             child.h = child.distance(goal)
-            if open_list.get(child.signature) is None or open_list[child.signature].g < child.g:
+            if open_list.get(child.signature) is None or child.g < open_list[child.signature].g:
                 heapq.heappush(
                     open_list_q, (child.get_f(), child.h, child.g, child.signature))
                 open_list[child.signature] = child
