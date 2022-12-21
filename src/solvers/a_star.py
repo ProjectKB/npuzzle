@@ -8,8 +8,7 @@ from src.puzzle import Puzzle
 def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
     puzzle.h = puzzle.distance(goal)
 
-    open_list_q: list[tuple[float, float, float, str]] = [
-        (puzzle.get_f(), puzzle.h, puzzle.g, puzzle.signature)]
+    open_list_q: list[tuple[float, float, float, str]] = [(puzzle.get_f(), puzzle.h, puzzle.g, puzzle.signature)]
     open_list: dict[str, Puzzle] = {puzzle.signature: puzzle}
     closed_list: dict[str, Puzzle] = {}
 
@@ -47,8 +46,7 @@ def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
 
             child.h = child.distance(goal)
             if open_list.get(child.signature) is None or child.g < open_list[child.signature].g:
-                heapq.heappush(
-                    open_list_q, (child.get_f(), child.h, child.g, child.signature))
+                heapq.heappush(open_list_q, (child.get_f(), child.h, child.g, child.signature))
                 open_list[child.signature] = child
 
         # DEBUG
