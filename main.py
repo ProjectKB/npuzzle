@@ -41,6 +41,6 @@ if __name__ == '__main__':
     if args.control:
         print(goal)
 
-    # a_star(puzzle, utils.inverse(puzzle.size, goal))
+    a_star(puzzle, utils.inverse(puzzle.size, goal))
     # greedy_search(puzzle, utils.inverse(puzzle.size, goal))
-    uniform_cost(puzzle, utils.inverse(puzzle.size, goal))
+    # uniform_cost(puzzle, utils.inverse(puzzle.size, goal))

@@ -37,11 +37,7 @@ def a_star(puzzle: Puzzle, goal: list[int]) -> Puzzle | None:
         children = current.create_children()
 
         for child in children:
-            old_closed = closed_list.get(child.signature)
-            if old_closed:
-                if child.g < old_closed.g:
-                    old_closed.g = child.g
-                    old_closed.parent = child.parent
+            if closed_list.get(child.signature):
                 continue
 
             child.h = child.distance(goal)
