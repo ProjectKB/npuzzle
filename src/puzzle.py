@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from src.utils import (chebyshev_distance, euclidean_distance, index_to_pos,
-                       manhattan_distance, pos_to_index)
+from src.utils import (manhattan_distance, index_to_pos, pos_to_index)
 
 moves: list[tuple[int, int]] = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 
@@ -14,6 +13,7 @@ class Puzzle:
     g: float
     h: float
     signature: str
+    get_distance: callable(tuple[float, float], tuple[float, float])
 
     def __init__(self, parent: Puzzle | None, size: int, grid: list[int], zero: int):
         self.size = size
@@ -23,6 +23,7 @@ class Puzzle:
         self.g = parent.g + 1 if parent is not None else 0
         self.h = 0
         self.signature = self.__get_signature()
+        self.get_distance = parent.get_distance if parent is not None else manhattan_distance
 
     def __str__(self) -> str:
         max_len = len(str(self.size ** 2))
@@ -55,12 +56,8 @@ class Puzzle:
         return self.g + self.h
 
     def distance(self, to: list[int]) -> float:
-        # choose heuristic according to strategy (euclidian, manhattan...)
-        # what's better between get h for every case or only for moving one ?
-
         distance: float = 0
         for i, nb in enumerate(self.grid):
             if nb != 0:
-                distance += manhattan_distance(index_to_pos(i,
-                                               self.size), index_to_pos(to[nb], self.size))
+                distance += self.get_distance(index_to_pos(i, self.size), index_to_pos(to[nb], self.size))
         return distance

@@ -1,8 +1,9 @@
 import math
+import time
 
 
 def index_to_pos(index: int, size: int) -> tuple[int, int]:
-    return (index % size, math.floor(index / size))
+    return index % size, math.floor(index / size)
 
 
 def pos_to_index(pos: tuple[int, int], size: int) -> int:
@@ -99,3 +100,96 @@ def chebyshev_distance(point1: tuple[float, float], point2: tuple[float, float])
     x2, y2 = point2
 
     return max(x1 - x2, y1 - y2)
+
+
+def get_distance(name: str):
+    distance: dict = {
+        "manhattan": manhattan_distance,
+        "euclidean": euclidean_distance,
+        "chebyshev": chebyshev_distance,
+    }
+
+    return distance[name]
+
+
+def print_success(open_list: dict, closed_list: dict, final_puzzle: object, process: bool):
+    open_list_len: int = len(open_list)
+    closed_list_len: int = len(closed_list)
+
+    __funky_print_states(final_puzzle) if process else __print_states(final_puzzle)
+
+    print(
+        f"\n\tSuccess - Open {open_list_len} - Closed {closed_list_len} - G: {final_puzzle.g} - "
+        f"OT {closed_list_len} - OS {open_list_len + closed_list_len}\n"
+    )
+
+
+def print_failure():
+    print("\n\tThis puzzle is unsolvable\n")
+
+
+def print_verbose(step: int, open_list: dict, closed_list: dict):
+    print(f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
+
+
+def __print_states(puzzle: object):
+    if puzzle.parent is not None:
+        __print_states(puzzle.parent)
+    print(puzzle)
+
+
+def __remove_lines(size: int):
+    for i in range(0, size + 3):
+        print("\033[1A\x1b[2K", end='')
+
+
+def __get_field_size(size: int) -> int:
+    pow: int = 1
+    size: int = size ** 2 - 1
+    while size > 10 ** pow:
+        pow += 1
+    return pow
+
+
+def __funky_print(grid: list[int], size: int, case: int, field_size: int, data: list[int], color: str, remove: bool = True):
+    if remove:
+        __remove_lines(size)
+    print("\n", end="\t")
+    for i in range(0, size ** 2):
+        if i == case:
+            print(f"{color}{grid[i]:>{field_size}}\033[0m", end=' ')
+        else:
+            print(f"{grid[i]:>{field_size}}", end=' ')
+        if not (i + 1) % size:
+            print("\n", end="\t")
+    print(f"\n\tF: {data[2]} - H: {data[1]} - G: {data[0]}")
+    time.sleep(0.5)
+
+
+def __funky_print_states(puzzle: object):
+    OKBLUE: str = '\033[94m'
+    OKCYAN: str = '\033[96m'
+    OKGREEN: str = '\033[92m'
+    size: int = puzzle.size
+    g: list[int] = []
+    h: list[int] = []
+    f: list[int] = []
+    puzzles: list[object] = []
+
+    end: int = puzzle.g - 1
+    field_size: int = __get_field_size(size)
+    while puzzle is not None:
+        g.append(puzzle.g)
+        h.append(puzzle.h)
+        f.append(puzzle.g + puzzle.h)
+        puzzles.append(puzzle.grid)
+        puzzle = puzzle.parent
+    puzzles = puzzles[::-1]
+    data = list(zip(g[::-1], h[::-1], f[::-1]))
+
+    for i, [pick, move] in enumerate(zip(puzzles[:-1], puzzles[1:])):
+        diff = [1 if p == m else 0 for p, m in zip(pick, move)]
+        diff_index = [i for i, d in enumerate(diff) if d == 0]
+        nb = pick[diff_index[0]] if pick[diff_index[0]] != 0 else pick[diff_index[1]]
+        __funky_print(pick, size, pick.index(nb), field_size, data[i], OKCYAN, i != 0)
+        __funky_print(move, size, move.index(nb), field_size, data[i + 1], OKBLUE if i != end else OKGREEN)

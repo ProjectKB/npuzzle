@@ -3,22 +3,23 @@ from __future__ import annotations
 import heapq
 
 from src.puzzle import Puzzle
+from src.utils import print_success, print_verbose, print_failure
 
 
-def uniform_cost(puzzle: Puzzle, goal: list[int]):
-    # A* but h == 0 for every node resulting in BFS algorithm (nodes are explored in width, and EVERY one of them are visited)
+def uniform_cost(puzzle: Puzzle, goal: list[int], verbose: bool, process: bool):
+    # A* but h == 0 for every node resulting in BFS algorithm (nodes are explored in width by depth)
     puzzle.h = puzzle.distance(goal)
 
     open_list_q: list[tuple[float, str]] = [(puzzle.g, puzzle.signature)]
     open_list: dict[str, Puzzle] = {puzzle.signature: puzzle}
     closed_list: dict[str, Puzzle] = {}
 
-    # DEBUG
-    step = 0
+    if verbose:
+        step = 0
 
     while open_list:
-        # DEBUG
-        step += 1
+        if verbose:
+            step += 1
 
         current_q = heapq.heappop(open_list_q)
 
@@ -27,13 +28,12 @@ def uniform_cost(puzzle: Puzzle, goal: list[int]):
 
         current = open_list[current_q[1]]
 
-        if current.h == 0:
-            print(
-                f"Steps: {step} - Open {len(open_list)} - Closed {len(closed_list)} - G: {current.g}")
-            return current
-
         closed_list[current.signature] = current
         del open_list[current.signature]
+
+        if current.h == 0:
+            print_success(open_list, closed_list, current, process)
+            return
 
         children = current.create_children()
 
@@ -46,14 +46,7 @@ def uniform_cost(puzzle: Puzzle, goal: list[int]):
                 heapq.heappush(open_list_q, (child.g, child.signature))
                 open_list[child.signature] = child
 
-        # DEBUG
-        if step % 10000 == 0:
-            print(
-                f"Running step {step}, open {len(open_list)}, closed {len(closed_list)}")
+        if verbose and step % 10000 == 0:
+            print_verbose(step, open_list, closed_list)
 
-    # DEBUG
-    print(f"Finished in {step} steps")
-
-    # No solution found
-    # return None
-    return None
+    print_failure()
