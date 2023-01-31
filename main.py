@@ -5,6 +5,7 @@ import src.utils as utils
 from src.solvers.a_star import a_star
 from src.solvers.greedy_search import greedy_search
 from src.solvers.uniform_cost import uniform_cost
+from src.solvers.vs import vs
 
 if __name__ == '__main__':
     argparse = a.ArgumentParser()
@@ -17,6 +18,8 @@ if __name__ == '__main__':
                           help="add verbose while algo is running")
     argparse.add_argument("-p", "--process", action="store_true", default=False,
                           help="the output will show the algorithm process")
+    argparse.add_argument("-vs", "--versus", action="store_true", default=False,
+                          help="you'll have the possibility to try to beat our algo")
     argparse.add_argument("-d", "--distance", default="manhattan",
                           help='choose a distance method between "manhattan", "euclidean" and "chebyshev", default is '
                                '"manhattan"')
@@ -41,6 +44,9 @@ if __name__ == '__main__':
     goal = utils.generate_control(puzzle.size)
 
     match args.algo:
-        case "a_star": a_star(puzzle, utils.inverse(puzzle.size, goal), args.verbose, args.process)
-        case "greedy": greedy_search(puzzle, utils.inverse(puzzle.size, goal), args.verbose, args.process)
-        case "uniform": uniform_cost(puzzle, utils.inverse(puzzle.size, goal), args.verbose, args.process)
+        case "a_star": end = a_star(puzzle, utils.inverse(puzzle.size, goal), args.verbose, args.process)
+        case "greedy": end = greedy_search(puzzle, utils.inverse(puzzle.size, goal), args.verbose, args.process)
+        case "uniform": end = uniform_cost(puzzle, utils.inverse(puzzle.size, goal), args.verbose, args.process)
+
+    if args.versus and end and end.g:
+        vs(puzzle, goal, end)

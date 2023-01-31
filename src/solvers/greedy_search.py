@@ -6,7 +6,7 @@ from src.puzzle import Puzzle
 from src.utils import print_success, print_verbose, print_failure
 
 
-def greedy_search(puzzle: Puzzle, goal: list[int], verbose: bool, process: bool):
+def greedy_search(puzzle: Puzzle, goal: list[int], verbose: bool, process: bool) -> Puzzle | None:
     # A* but g == 0 for every node
     # It can be really fast, but it can lead to suboptimal solution because of local minimum.
     # Meaning the algorithm doesn't consider the cost of an action but only his short term result,
@@ -36,7 +36,7 @@ def greedy_search(puzzle: Puzzle, goal: list[int], verbose: bool, process: bool)
 
         if current.h == 0:
             print_success(open_list, closed_list, current, process)
-            return
+            return current
 
         children = current.create_children()
 

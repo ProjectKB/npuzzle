@@ -6,7 +6,7 @@ from src.puzzle import Puzzle
 from src.utils import print_success, print_verbose, print_failure
 
 
-def a_star(puzzle: Puzzle, goal: list[int], verbose: bool, process: bool):
+def a_star(puzzle: Puzzle, goal: list[int], verbose: bool, process: bool) -> Puzzle | None:
     puzzle.h = puzzle.distance(goal)
 
     open_list_q: list[tuple[float, float, float, str]] = [(puzzle.get_f(), puzzle.h, puzzle.g, puzzle.signature)]
@@ -32,7 +32,7 @@ def a_star(puzzle: Puzzle, goal: list[int], verbose: bool, process: bool):
 
         if current.h == 0:
             print_success(open_list, closed_list, current, process)
-            return
+            return current
 
         children = current.create_children()
 

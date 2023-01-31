@@ -143,7 +143,7 @@ def __remove_lines(size: int):
         print("\033[1A\x1b[2K", end='')
 
 
-def __get_field_size(size: int) -> int:
+def get_field_size(size: int) -> int:
     pow: int = 1
     size: int = size ** 2 - 1
     while size > 10 ** pow:
@@ -177,7 +177,7 @@ def __funky_print_states(puzzle: object):
     puzzles: list[object] = []
 
     end: int = puzzle.g - 1
-    field_size: int = __get_field_size(size)
+    field_size: int = get_field_size(size)
     while puzzle is not None:
         g.append(puzzle.g)
         h.append(puzzle.h)
